@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+
+    <title>Make a Wish & Cut the Cake! 🎂</title>
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+
+    <!-- Canvas Confetti Library -->
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+
+
+        html, body {
+
+            width: 100%;
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+
+        }
+
+
+
+        body {
+
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f3a683 100%);
+
+            min-height: 100vh;
+
+            min-height: 100dvh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: 'Dancing Script', cursive;
+
+            position: relative;
+
+            padding: clamp(12px, 3vh, 30px) clamp(10px, 3vw, 24px);
+
+        }
+
+
+
+        /* Responsive Outer Shell Container */
+
+        .wrapper {
+
+            width: 100%;
+
+            max-width: 600px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: auto;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+
+        /* Floating Background Elements */
+
+        .floating-icon {
+
+            position: absolute;
+
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+
+            opacity: 0.75;
+
+            animation: floatUp 8s infinite ease-in-out;
+
+            user-select: none;
+
+            pointer-events: none;
+
+            z-index: 1;
+
+        }
+
+        .f1 { left: 5%; animation-duration: 7s; animation-delay: 0s; }
+
+        .f2 { left: 22%; animation-duration: 9s; animation-delay: 2s; }
+
+        .f3 { left: 75%; animation-duration: 8s; animation-delay: 1s; }
+
+        .f4 { left: 88%; animation-duration: 10s; animation-delay: 3s; }
+
+
+
+        @keyframes floatUp {
+
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.2; }
+
+            50% { opacity: 0.8; }
+
+            100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+
+        }
+
+
+
+        /* Title Headers */
+
+        h1.page-title {
+
+            font-family: 'Great Vibes', cursive;
+
+            color: #d63031;
+
+            font-size: clamp(2.5rem, 8vw, 4.2rem);
+
+            line-height: 1.15;
+
+            margin-bottom: clamp(4px, 1vh, 8px);
+
+            text-shadow: 2px 3px 6px rgba(255, 255, 255, 0.8);
+
+            text-align: center;
+
+            word-wrap: break-word;
+
+        }
+
+
+
+        p.instruction {
+
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+
+            color: #6d214f;
+
+            font-weight: 700;
+
+            margin-bottom: clamp(15px, 3vh, 25px);
+
+            text-align: center;
+
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+
+            transition: opacity 0.5s ease;
+
+            line-height: 1.25;
+
+            padding: 0 10px;
+
+        }
+
+
+
+        /* Cake SVG Area - Fully Fluid Sizing */
+
+        .cake-stage {
+
+            position: relative;
+
+            width: 100%;
+
+            max-width: 360px;
+
+            aspect-ratio: 360 / 300;
+
+            margin: 0 auto;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            filter: drop-shadow(0 15px 25px rgba(214, 48, 49, 0.2));
+
+            user-select: none;
+
+        }
+
+
+
+        /* Flame Wavy Animation */
+
+        .flame-group {
+
+            transform-origin: 180px 50px;
+
+            animation: waveFlame 1.2s infinite ease-in-out alternate;
+
+            transition: opacity 0.4s ease, transform 0.4s ease;
+
+        }
+
+
+
+        @keyframes waveFlame {
+
+            0% { transform: scale(1) rotate(-3deg) skewX(-2deg); }
+
+            33% { transform: scale(1.08) rotate(2deg) skewX(3deg); }
+
+            66% { transform: scale(0.95) rotate(-1deg) skewX(-3deg); }
+
+            100% { transform: scale(1.12) rotate(4deg) skewX(2deg); }
+
+        }
+
+
+
+        .flame-group.out {
+
+            opacity: 0 !important;
+
+            transform: scale(0.1) translateY(-30px) !important;
+
+        }
+
+
+
+        /* Smoke Effect */
+
+        .smoke {
+
+            opacity: 0;
+
+            transition: opacity 1s ease 0.2s, transform 2.5s ease;
+
+            transform-origin: 180px 40px;
+
+        }
+
+
+
+        .smoke.active {
+
+            opacity: 0.7;
+
+            transform: translateY(-40px) scale(1.4);
+
+        }
+
+
+
+        /* Animated Knife Slicing Action */
+
+        .knife {
+
+            position: absolute;
+
+            top: -6%;
+
+            right: 8%;
+
+            width: 36%;
+
+            height: 43%;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transform: rotate(-40deg) translate(50px, -50px);
+
+            transition: opacity 0.3s ease;
+
+            z-index: 20;
+
+        }
+
+
+
+        .knife.cutting {
+
+            opacity: 1;
+
+            animation: sliceMotion 1.5s cubic-bezier(0.45, 0, 0.15, 1) forwards;
+
+        }
+
+
+
+        @keyframes sliceMotion {
+
+            0% { transform: rotate(-40deg) translate(50px, -50px); opacity: 1; }
+
+            30% { transform: rotate(-15deg) translate(-75px, 30px); }
+
+            60% { transform: rotate(-5deg) translate(-75px, 125px); }
+
+            85% { transform: rotate(-20deg) translate(-40px, 80px); opacity: 1; }
+
+            100% { transform: rotate(-40deg) translate(60px, -60px); opacity: 0; }
+
+        }
+
+
+
+        /* Slice Reveal & Smooth Separation Animation */
+
+        .slice-group {
+
+            opacity: 0;
+
+            transform-origin: 180px 180px;
+
+            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+
+        }
+
+
+
+        /* Inner Cross Section Cut Line */
+
+        .cut-gap {
+
+            opacity: 0;
+
+            transition: opacity 0.4s ease;
+
+        }
+
+
+
+        .cake-stage.cut .cut-gap {
+
+            opacity: 1;
+
+        }
+
+
+
+        /* SMOOTH REMOVAL OF REMAINING CAKE BODY & CANDLE ELEMENTS */
+
+        #main-cake-body,
+
+        #candle-group,
+
+        .cut-gap {
+
+            transition: opacity 0.8s ease, transform 0.8s ease;
+
+            transform-origin: 180px 180px;
+
+        }
+
+
+
+        .cake-stage.cut #main-cake-body,
+
+        .cake-stage.cut #candle-group,
+
+        .cake-stage.cut .cut-gap {
+
+            opacity: 0;
+
+            transform: scale(0.88) translateY(12px);
+
+            pointer-events: none;
+
+        }
+
+
+
+        .cake-stage.cut .slice-group {
+
+            opacity: 1;
+
+            transform: translateX(-10px) translateY(15px) rotate(-4deg);
+
+        }
+
+
+
+        /* Reveal Container */
+
+        .reveal-box {
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform: translateY(20px) scale(0.95);
+
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            margin-top: clamp(15px, 3vh, 25px);
+
+            width: 100%;
+
+            max-width: 480px;
+
+            padding: 0 10px;
+
+        }
+
+
+
+        .reveal-box.show {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform: translateY(0) scale(1);
+
+        }
+
+
+
+        .message-23 {
+
+            font-family: 'Great Vibes', cursive;
+
+            font-size: clamp(2.4rem, 7.5vw, 3.8rem);
+
+            color: #d63031;
+
+            text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9);
+
+            margin-bottom: clamp(12px, 2.5vh, 20px);
+
+            text-align: center;
+
+            line-height: 1.2;
+
+            animation: heartPulse 1.6s infinite alternate ease-in-out;
+
+            word-wrap: break-word;
+
+            width: 100%;
+
+        }
+
+
+
+        @keyframes heartPulse {
+
+            0% { transform: scale(0.97); }
+
+            100% { transform: scale(1.04); }
+
+        }
+
+
+
+        .thank-you-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+
+            color: #ffffff !important;
+
+            font-family: 'Quicksand', sans-serif;
+
+            font-size: clamp(0.95rem, 3.2vw, 1.2rem);
+
+            font-weight: 600;
+
+            padding: clamp(12px, 2vh, 16px) clamp(22px, 5vw, 36px);
+
+            border-radius: 50px;
+
+            text-decoration: none;
+
+            box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
+
+            transition: all 0.3s ease;
+
+            white-space: normal;
+
+            text-align: center;
+
+            max-width: 100%;
+
+            box-sizing: border-box;
+
+            touch-action: manipulation;
+
+        }
+
+
+
+        .thank-you-btn:hover,
+
+        .thank-you-btn:active {
+
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+
+            transform: translateY(-3px) scale(1.02);
+
+            box-shadow: 0 15px 30px rgba(255, 71, 87, 0.6);
+
+        }
+
+
+
+        /* Media Queries for Ultra-narrow & Small Devices */
+
+        @media (max-width: 360px) {
+
+            body {
+
+                padding: 10px 8px;
+
+            }
+
+            .floating-icon {
+
+                display: none; /* Hide background clutter on small phones */
+
+            }
+
+        }
+
+
+
+        @media (max-height: 550px) and (orientation: landscape) {
+
+            body {
+
+                padding: 10px;
+
+            }
+
+            h1.page-title {
+
+                font-size: 2.2rem;
+
+            }
+
+            p.instruction {
+
+                font-size: 1.1rem;
+
+                margin-bottom: 8px;
+
+            }
+
+            .cake-stage {
+
+                max-width: 210px;
+
+            }
+
+            .reveal-box {
+
+                margin-top: 10px;
+
+            }
+
+            .message-23 {
+
+                font-size: 2.2rem;
+
+                margin-bottom: 8px;
+
+            }
+
+            .thank-you-btn {
+
+                padding: 8px 20px;
+
+                font-size: 0.9rem;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <!-- Floating Background Icons -->
+
+    <div class="floating-icon f1">🎂</div>
+
+    <div class="floating-icon f2">🌸</div>
+
+    <div class="floating-icon f3">✨</div>
+
+    <div class="floating-icon f4">💖</div>
+
+
+
+    <!-- Main Responsive Shell Wrapper -->
+
+    <div class="wrapper">
+
+        <!-- Page Headers -->
+
+        <h1 class="page-title">Make a Wish! 🕯️</h1>
+
+        <p class="instruction" id="status-text">Tap the cake to blow out the candle!</p>
+
+
+
+        <!-- Interactive Vanilla Cake Stage -->
+
+        <div class="cake-stage" id="cake" onclick="triggerCandleBlow()">
+
+           
+
+            <!-- Knife Element for Cutting Animation -->
+
+            <svg class="knife" id="knife" viewBox="0 0 100 100">
+
+                <path d="M 10 80 L 70 20 C 75 15, 85 25, 80 30 L 25 85 Z" fill="#d1d8e0" />
+
+                <path d="M 10 80 L 25 85 L 75 35 L 70 30 Z" fill="#f1f2f6" />
+
+                <path d="M 70 20 C 75 15, 85 25, 80 30 L 90 20 C 95 15, 85 5, 75 10 Z" fill="#2f3542" />
+
+            </svg>
+
+
+
+            <!-- Main Cake SVG -->
+
+            <svg viewBox="0 0 360 300" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+
+                <defs>
+
+                    <!-- Flame Gradient -->
+
+                    <radialGradient id="flameGrad" cx="50%" cy="50%" r="50%">
+
+                        <stop offset="0%" stop-color="#ffffff" />
+
+                        <stop offset="25%" stop-color="#fffa65" />
+
+                        <stop offset="60%" stop-color="#ff9f1a" />
+
+                        <stop offset="100%" stop-color="#ff3838" stop-opacity="0" />
+
+                    </radialGradient>
+
+                </defs>
+
+
+
+                <!-- Stand & Plate (Stays visible) -->
+
+                <ellipse cx="180" cy="275" rx="75" ry="12" fill="#dcdde1" opacity="0.6" />
+
+                <path d="M 170 275 L 175 245 L 185 245 L 190 275 Z" fill="#ffffff" opacity="0.7" />
+
+                <ellipse cx="180" cy="245" rx="145" ry="22" fill="#ffffff" opacity="0.9" />
+
+                <ellipse cx="180" cy="242" rx="133" ry="18" fill="#f5f6fa" />
+
+
+
+                <!-- SOLID MAIN CAKE BODY -->
+
+                <g id="main-cake-body">
+
+                    <!-- Bottom Golden Sponge Layer -->
+
+                    <path d="M 60 170 C 60 205, 300 205, 300 170 L 300 220 C 300 245, 60 245, 60 220 Z" fill="#f5cd79" />
+
+                   
+
+                    <!-- Middle Cream Layer -->
+
+                    <path d="M 60 150 C 60 185, 300 185, 300 150 L 300 175 C 300 210, 60 210, 60 175 Z" fill="#ffffff" />
+
+                   
+
+                    <!-- Top Strawberry Sponge Layer -->
+
+                    <path d="M 60 120 C 60 155, 300 150, 300 120 L 300 155 C 300 190, 60 190, 60 155 Z" fill="#f8a5c2" />
+
+                   
+
+                    <!-- Cream Frosting Top Surface -->
+
+                    <ellipse cx="180" cy="120" rx="120" ry="32" fill="#fff0f5" />
+
+
+
+                    <!-- Rich Cream Drips -->
+
+                    <path d="M 60 120 Q 75 145 90 120 Q 105 150 120 120 Q 135 145 150 120 Q 165 150 180 120 Q 195 145 210 120 Q 225 150 240 120 Q 255 145 270 120 Q 285 145 300 120 C 300 120, 300 135, 300 140 C 300 175, 60 175, 60 140 Z" fill="#ffffff" opacity="0.95" />
+
+
+
+                    <!-- Cherries on Top -->
+
+                    <circle cx="95" cy="115" r="9" fill="#ff4757" />
+
+                    <circle cx="135" cy="132" r="9" fill="#ff4757" />
+
+                    <circle cx="225" cy="132" r="9" fill="#ff4757" />
+
+                    <circle cx="265" cy="115" r="9" fill="#ff4757" />
+
+                </g>
+
+
+
+                <!-- INNER CUT WALL GAP -->
+
+                <g class="cut-gap">
+
+                    <path d="M 180 120 L 125 138 L 125 228 L 180 205 Z" fill="#eccc68" />
+
+                    <path d="M 180 120 L 125 138 L 125 158 L 180 140 Z" fill="#ff4757" opacity="0.2" />
+
+                    <path d="M 180 155 L 125 173 L 125 185 L 180 167 Z" fill="#ffffff" />
+
+                    <path d="M 180 120 L 125 138 L 180 205 Z" fill="#2d3436" opacity="0.15" />
+
+                </g>
+
+
+
+                <!-- DETACHABLE CAKE SLICE (Fades in & stays on plate) -->
+
+                <g class="slice-group" id="slice-group">
+
+                    <!-- Outer Frosting Side of Slice -->
+
+                    <path d="M 125 138 C 100 145, 75 155, 60 170 L 60 220 C 75 235, 100 242, 125 228 Z" fill="#f5cd79" />
+
+                    <path d="M 125 138 C 100 145, 75 155, 60 170 L 60 185 C 75 198, 100 205, 125 193 Z" fill="#ffffff" />
+
+                    <path d="M 125 138 C 100 145, 75 155, 60 170 L 60 175 C 75 188, 100 195, 125 183 Z" fill="#f8a5c2" />
+
+                   
+
+                    <!-- Slice Top Cream -->
+
+                    <path d="M 180 120 L 125 138 C 100 145, 75 155, 60 170 L 180 120 Z" fill="#fff0f5" />
+
+                    <path d="M 60 170 Q 75 185 90 170 Q 105 185 125 170 L 125 138 Q 105 145 90 120 Q 75 145 60 120 Z" fill="#ffffff" />
+
+
+
+                    <!-- Inner Exposed Layer Face -->
+
+                    <path d="M 180 120 L 60 170 L 60 220 L 180 205 Z" fill="#f1c40f" />
+
+                    <path d="M 180 150 L 60 192 L 60 208 L 180 168 Z" fill="#ffffff" />
+
+                    <path d="M 180 120 L 60 170 L 60 185 L 180 138 Z" fill="#ff7675" />
+
+
+
+                    <!-- Cherry topping on the slice -->
+
+                    <circle cx="105" cy="148" r="8.5" fill="#ff4757" />
+
+                </g>
+
+
+
+                <!-- CANDLE GROUP -->
+
+                <g id="candle-group">
+
+                    <!-- Candle Stick -->
+
+                    <rect x="175" y="50" width="10" height="50" rx="4" fill="#ff6b81" />
+
+                    <rect x="177" y="50" width="3" height="50" fill="#ffffff" opacity="0.6" />
+
+                    <line x1="180" y1="50" x2="180" y2="42" stroke="#2d3436" stroke-width="2.5" />
+
+
+
+                    <!-- Smoke Trail -->
+
+                    <g class="smoke" id="smoke">
+
+                        <circle cx="180" cy="32" r="5" fill="#a4b0be" />
+
+                        <circle cx="176" cy="20" r="7" fill="#cbd5e1" />
+
+                        <circle cx="184" cy="8" r="9" fill="#e2e8f0" />
+
+                    </g>
+
+
+
+                    <!-- Live Wavy Candle Flame -->
+
+                    <g class="flame-group" id="flame">
+
+                        <circle cx="180" cy="28" r="22" fill="url(#flameGrad)" />
+
+                        <path d="M 180 8 C 170 22, 173 40, 180 40 C 187 40, 190 22, 180 8 Z" fill="#ff9f1a" />
+
+                        <path d="M 180 16 C 174 25, 176 38, 180 38 C 184 38, 186 25, 180 16 Z" fill="#fffa65" />
+
+                    </g>
+
+                </g>
+
+            </svg>
+
+        </div>
+
+
+
+        <!-- Celebration Message & Final Button -->
+
+        <div class="reveal-box" id="reveal-box">
+
+            <div class="message-23">✨ Happy 23, Oindrila! ✨</div>
+
+            <a href="{% url 'thank_you' %}" class="thank-you-btn">A Special Thank You Note 💌 ➔</a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Sequence Control Script -->
+
+    <script>
+
+        let isBlown = false;
+
+
+
+        function triggerCandleBlow() {
+
+            if (isBlown) return;
+
+            isBlown = true;
+
+
+
+            // 1. Extinguish Wavy Flame & Show Smoke
+
+            const flame = document.getElementById('flame');
+
+            const smoke = document.getElementById('smoke');
+
+            flame.classList.add('out');
+
+            smoke.classList.add('active');
+
+
+
+            document.getElementById('status-text').innerText = "Cutting the cake...";
+
+
+
+            // 2. Animate Knife Cutting Motion
+
+            setTimeout(() => {
+
+                document.getElementById('knife').classList.add('cutting');
+
+            }, 400);
+
+
+
+            // 3. Separate Cake Slice, Smoothly Hide Remaining Cake, & Trigger Confetti
+
+            setTimeout(() => {
+
+                document.getElementById('cake').classList.add('cut');
+
+                document.getElementById('status-text').innerText = "Yay! Happy Birthday!";
+
+               
+
+                // Responsive Confetti Burst
+
+                const count = window.innerWidth < 600 ? 80 : 130;
+
+                confetti({
+
+                    particleCount: count,
+
+                    spread: 90,
+
+                    origin: { y: 0.65 },
+
+                    colors: ['#ff4757', '#ff6b81', '#fecfef', '#ffffff', '#fffa65']
+
+                });
+
+
+
+                // 4. Reveal "Happy 23" & Thank You Button
+
+                document.getElementById('reveal-box').classList.add('show');
+
+            }, 1500);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

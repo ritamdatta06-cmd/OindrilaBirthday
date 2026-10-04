@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thank You! 💌</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- SweetAlert2 for Styled Pop-up -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Prevent layout overflow across all browsers */
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f3a683 100%);
+            min-height: 100vh;
+            min-height: 100dvh; /* Mobile viewport height fix */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+            padding: 20px 16px;
+        }
+
+        /* Floating Background Elements - Constrained positioning to fix overflow */
+        .floating-icon {
+            position: absolute;
+            font-size: clamp(1.6rem, 4vw, 2.3rem);
+            opacity: 0.7;
+            animation: floatUp 8s infinite ease-in-out;
+            user-select: none;
+            pointer-events: none;
+            will-change: transform;
+        }
+        .f1 { left: 4%; animation-duration: 7s; animation-delay: 0s; }
+        .f2 { left: 18%; animation-duration: 9s; animation-delay: 2s; }
+        .f3 { left: 78%; animation-duration: 8s; animation-delay: 1s; }
+        .f4 { left: 88%; animation-duration: 10s; animation-delay: 3s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* Header Titles - Fluid Responsive Typography */
+        .page-title {
+            font-family: 'Great Vibes', cursive;
+            color: #d63031;
+            font-size: clamp(2.3rem, 7.5vw, 3.8rem);
+            margin-bottom: 5px;
+            text-shadow: 2px 3px 6px rgba(255, 255, 255, 0.8);
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 3.8vw, 1.8rem);
+            color: #6d214f;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+            padding: 0 10px;
+            max-width: 100%;
+        }
+
+        /* Frosted Glass Main Card Container */
+        .feedback-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: clamp(20px, 5vw, 35px) clamp(16px, 4vw, 30px);
+            width: calc(100% - 24px); /* Leaves safe margin on smaller screens */
+            max-width: 520px;
+            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feedback-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(214, 48, 49, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            width: 100%;
+        }
+
+        .form-label {
+            display: block;
+            font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+            font-weight: 700;
+            color: #4a154b;
+            margin-bottom: 10px;
+        }
+
+        /* Input Fields & Django Form Overrides */
+        .form-input,
+        textarea.form-input,
+        input[type="text"].form-input {
+            width: 100%;
+            max-width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #fecfef;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            color: #2d3436;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        textarea.form-input:focus,
+        input[type="text"].form-input:focus {
+            border-color: #ff6b81;
+            background: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 107, 129, 0.3);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Action Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            width: 100%;
+        }
+
+        .submit-btn {
+            flex: 2;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: #ffffff;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(255, 71, 87, 0.35);
+            transition: all 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(255, 71, 87, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .next-btn {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            color: #6d214f;
+            border: 2px solid #f8a5c2;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .next-btn:hover {
+            background: #fff0f5;
+            border-color: #ff4757;
+            color: #ff4757;
+            transform: translateY(-3px);
+        }
+
+        /* Django Field Errors */
+        .errorlist {
+            color: #d63031;
+            list-style: none;
+            font-size: 0.88rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .submit-btn,
+            .next-btn {
+                width: 100%;
+                flex: none;
+                padding: 14px;
+            }
+
+            .f4 {
+                display: none; /* Prevents right-margin overflow on extra narrow devices */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Background Decor -->
+    <div class="floating-icon f1">🌸</div>
+    <div class="floating-icon f2">✨</div>
+    <div class="floating-icon f3">💖</div>
+    <div class="floating-icon f4">💌</div>
+
+    <!-- Header Section -->
+    <h1 class="page-title">Thank You!</h1>
+    <p class="subtitle">Your presence made this extra special ✨</p>
+
+    <!-- Frosted Glass Card -->
+    <div class="feedback-card">
+        
+        <!-- Django Form routing directly to final page -->
+        <form method="POST" action="" id="thankyou-form" onsubmit="handleFormSubmit(event)">
+            {% csrf_token %}
+
+            <!-- Guest Name (Django Field) -->
+            <div class="form-group">
+                <label class="form-label" for="{{ form.guest_name.id_for_label }}">
+                    {{ form.guest_name.label }} ✍️
+                </label>
+                {{ form.guest_name }}
+                {% if form.guest_name.errors %}
+                    <ul class="errorlist">{{ form.guest_name.errors }}</ul>
+                {% endif %}
+            </div>
+
+            <!-- Thank You Note (Django Field) -->
+            <div class="form-group">
+                <label class="form-label" for="{{ form.note.id_for_label }}">
+                    {{ form.note.label }} 💌
+                </label>
+                {{ form.note }}
+                {% if form.note.errors %}
+                    <ul class="errorlist">{{ form.note.errors }}</ul>
+                {% endif %}
+                <div class="char-counter"><span id="char-count">0</span> / 250</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <button type="submit" id="submit-btn" class="submit-btn" disabled>Send Note 💌</button>
+                <a href="{% url 'final' %}" class="next-btn">Next ➔</a>
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        // Elements
+        const submitBtn = document.getElementById('submit-btn');
+        const nameInput = document.getElementById('{{ form.guest_name.id_for_label }}');
+        const noteInput = document.getElementById('{{ form.note.id_for_label }}');
+
+        // Form Validation Check: Enables submit button only when text is entered
+        function validateForm() {
+            const hasName = nameInput && nameInput.value.trim().length > 0;
+            const hasNote = noteInput && noteInput.value.trim().length > 0;
+            
+            if (hasName && hasNote) {
+                submitBtn.removeAttribute('disabled');
+            } else {
+                submitBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        if (nameInput) nameInput.addEventListener('input', validateForm);
+        if (noteInput) {
+            noteInput.setAttribute('maxlength', '250');
+            noteInput.addEventListener('input', function() {
+                document.getElementById('char-count').innerText = this.value.length;
+                validateForm();
+            });
+        }
+
+        // Form Submission with Pop-up Alert and Confetti
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent instant navigation to display popup first
+
+            // Confetti Burst
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ['#ff4757', '#ff6b81', '#fecfef', '#ffffff', '#fffa65']
+            });
+
+            // Show "Submitted!" Popup Alert
+            Swal.fire({
+                title: 'Submitted! 💖',
+                text: 'Thank you so much for your sweet note!',
+                icon: 'success',
+                confirmButtonColor: '#ff4757',
+                confirmButtonText: 'Continue ✨',
+                background: '#ffffff',
+                customClass: {
+                    popup: 'rounded-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit form and route to final.html
+                }
+            });
+        }
+    </script>
+</body>
+</html>

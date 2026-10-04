@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thank You! ✨</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Global Reset & Horizontal Scroll Lock */
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f3a683 100%);
+            min-height: 100vh;
+            min-height: 100dvh; /* Mobile browser height handling */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+            padding: clamp(20px, 5vh, 40px) clamp(16px, 4vw, 24px);
+            text-align: center;
+        }
+
+        /* Floating Background Elements - Edge Safe Positioning */
+        .floating-icon {
+            position: absolute;
+            font-size: clamp(1.6rem, 4vw, 2.5rem);
+            opacity: 0.7;
+            animation: floatUp 8s infinite ease-in-out;
+            user-select: none;
+            pointer-events: none;
+            will-change: transform;
+        }
+        .f1 { left: 4%; animation-duration: 7s; animation-delay: 0s; }
+        .f2 { left: 20%; animation-duration: 9s; animation-delay: 2s; }
+        .f3 { left: 76%; animation-duration: 8s; animation-delay: 1s; }
+        .f4 { left: 88%; animation-duration: 10s; animation-delay: 3s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* Frosted Glass Card Container */
+        .final-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: clamp(30px, 6vw, 60px) clamp(20px, 5vw, 40px);
+            width: calc(100% - 24px); /* Screen safety margins */
+            max-width: 550px;
+            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.18);
+            animation: fadeIn 1.2s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .final-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(214, 48, 49, 0.25);
+        }
+
+        /* Heart Animation Icon */
+        .heart-icon {
+            font-size: clamp(2.8rem, 8vw, 4rem);
+            margin-bottom: clamp(14px, 3vw, 24px);
+            display: inline-block;
+            animation: pulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* Main Heading - Responsive Typography */
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            color: #d63031;
+            font-size: clamp(2.2rem, 7vw, 3.6rem);
+            margin-bottom: clamp(12px, 2.5vw, 20px);
+            line-height: 1.25;
+            text-shadow: 2px 3px 6px rgba(255, 255, 255, 0.8);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Subtitle Text - Responsive Typography */
+        .wishing-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.3rem, 4.5vw, 2.2rem);
+            color: #6d214f;
+            font-weight: 700;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Optimization Rules */
+        @media (max-width: 480px) {
+            .f4 {
+                display: none; /* Prevents overflow on ultra-narrow displays */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Background Decor -->
+    <div class="floating-icon f1">🌸</div>
+    <div class="floating-icon f2">✨</div>
+    <div class="floating-icon f3">💖</div>
+    <div class="floating-icon f4">💌</div>
+
+    <!-- Frosted Glass Card -->
+    <div class="final-card">
+        <div class="heart-icon">💖</div>
+        
+        <h1 class="main-title">Thank you for visiting our Website...</h1>
+        <p class="wishing-text">Wish you Enjoy this day beautifully ✨</p>
+    </div>
+
+    <script>
+        // Trigger celebration confetti on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initial center burst
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ff4757', '#ff6b81', '#fecfef', '#ffffff', '#fffa65']
+            });
+
+            // Side cannons effect after 300ms
+            setTimeout(() => {
+                confetti({
+                    particleCount: 60,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 60,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+            }, 300);
+        });
+    </script>
+</body>
+</html>
